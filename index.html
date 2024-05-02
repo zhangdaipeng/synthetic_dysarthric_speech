@@ -18,7 +18,7 @@
   }
 </style>
 </head>
-<body>
+<body οnlοad="executeAfterloadedBody()" >
 
    <div class="zdp_home" >
         <div class="layui-row " >
@@ -40,7 +40,7 @@
   layui.use(['jquery', 'layer','laytpl'], function(laytpl){
     var $ = layui.jquery;
     var layer = layui.layer;
-
+    var util = layui.util;
      // 假设您有两个包含相同路径但内容不同的音频文件路径数组
   const ori_arry = ['ori/01/S001F001P000W00037.wav', 'ori/01/S001F017P000W00025.wav',
        'ori/01/S001F016P000W00022.wav', 'ori/01/S001F007P000W00009.wav',
@@ -522,6 +522,10 @@
        'oat/26/S026F009P000W00012.wav', 'oat/26/S026F003P000W00031.wav',
        'oat/26/S026F006P000W00026.wav', 'oat/26/S026F007P000W00006.wav',
        'oat/26/S026F004P000W00002.wav', 'oat/26/S026F003P000W00013.wav'];
+  var loadIndex = layer.msg('加载中，请稍后...', {
+        icon: 16,
+        shade: 0.01
+      });;
     function displayAudiosInTable() {
       for(let index=1;index<27;index++){
            if (index === 22 || index === 24) {
@@ -535,6 +539,7 @@
           htmlStr+= '  <table class="layui-table" >\n' +
                       '                <thead>\n' +
                       '                  <tr style="background-color: #f2f2f2">\n' +
+                      '                    <th class="layui-font-16 " style="text-align: center" >序号</th>\n' +
                       '                    <th class="layui-font-16 " style="text-align: center" >原始录音</th>\n' +
                       '                    <th class="layui-font-16 " style="text-align: center" >合成构音障碍语音</th>\n' +
                       '                  </tr>\n' +
@@ -544,11 +549,15 @@
           ori_arry.forEach(function(path, index){
               let path_name = path.split("/")
               path_name = path_name[path_name.length-2]
+
               if(path_name==speaker){
-                     htmlStr+= '<tr><td style="text-align: center">' +
+                     htmlStr+= '<tr>' +
+                         '<td style="text-align: center" >'+(index+1) +
+                         '</td>'+
+                         '<td style="text-align: center" >' +
                       '<audio controls src="'+ori_arry[index]+'"></audio>' +
                       '</td>'+
-                      '<td style="text-align: center">' +
+                      '<td style="text-align: center" >' +
                        '<audio controls src="'+oat_arry[index]+'"></audio>' +
                       '</td></tr>';
               }
@@ -559,8 +568,11 @@
       }
     }
     displayAudiosInTable()
-
+    function  executeAfterloadedBody(){
+      layer.close(loadIndex)
+  }
   });
+
 </script>
 </body>
 </html>
